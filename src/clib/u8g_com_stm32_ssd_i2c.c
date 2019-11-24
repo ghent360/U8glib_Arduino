@@ -54,6 +54,7 @@
 #include "u8g.h"
 #include <Arduino.h>
 
+#ifdef STM32F4
 #if !defined(U8G_WITH_PINLIST)
 #error U8G_WITH_PINLIST should be defined for this driver to work.
 #endif
@@ -68,7 +69,7 @@ static void init_i2c_hw()
 {
   i2c_.sda = digitalPinToPinName(PIN_WIRE_SDA);
   i2c_.scl = digitalPinToPinName(PIN_WIRE_SCL);
-  i2c_custom_init(&i2c_, I2C_400KHz, I2C_ADDRESSINGMODE_7BIT, 0);
+  i2c_custom_init(&i2c_, 400000, I2C_ADDRESSINGMODE_7BIT, 0);
 }
 
 static void wait_i2c_ready()
@@ -129,3 +130,5 @@ uint8_t u8g_com_stm32_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
   }
   return 1;
 }
+
+#endif
