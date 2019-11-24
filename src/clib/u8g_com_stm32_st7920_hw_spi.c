@@ -94,7 +94,7 @@ static inline void configure_spi() {
   spi_init(&_spi, 1000000, SPI_MODE_0, MSBFIRST);
 }
 
-uint8_t u8g_com_stm32_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+uint8_t u8g_com_stm32_st7920_hw_spi_fn_old(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
   switch(msg)
   {

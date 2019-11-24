@@ -711,6 +711,8 @@ uint8_t u8g_com_linux_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
 
 uint8_t u8g_com_stm32_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);       /* u8g_com_stm32_st7920_hw_spi.c */
 uint8_t u8g_com_stm32_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);             /* u8g_com_stm32_ssd_i2c.c */
+uint8_t u8g_com_stm32_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
+uint8_t u8g_com_stm32_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
 
 uint8_t u8g_com_psoc5_ssd_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);   /* u8g_com_psoc5_ssd_hw_spi.c */
 uint8_t u8g_com_psoc5_ssd_hw_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);   /* u8g_com_psoc5_ssd_hw_parallel.c */
@@ -766,7 +768,7 @@ defined(__18CXX) || defined(__PIC32MX)
   #define U8G_COM_HW_SPI u8g_com_arduino_hw_spi_fn
   #define U8G_COM_ST7920_HW_SPI u8g_com_null_fn
  #elif defined(ARDUINO_ARCH_STM32)
-  #define U8G_COM_HW_SPI u8g_com_null_fn
+  #define U8G_COM_HW_SPI u8g_com_stm32_hw_spi_fn
   #define U8G_COM_ST7920_HW_SPI u8g_com_stm32_st7920_hw_spi_fn
  #endif // __AVR__
 #endif // ARDUINO
@@ -802,6 +804,9 @@ defined(__18CXX) || defined(__PIC32MX)
  #elif defined(__SAM3X8E__)   /* Arduino Due */
   //#define U8G_COM_SW_SPI u8g_com_arduino_std_sw_spi_fn
   #define U8G_COM_SW_SPI u8g_com_arduino_sw_spi_fn
+  #define U8G_COM_ST7920_SW_SPI u8g_com_arduino_st7920_spi_fn
+ #elif defined(ARDUINO_ARCH_STM32)
+  #define U8G_COM_SW_SPI u8g_com_stm32_sw_spi_fn
   #define U8G_COM_ST7920_SW_SPI u8g_com_arduino_st7920_spi_fn
  #elif defined(__arm__)   /* Teensy */
   #define U8G_COM_SW_SPI u8g_com_arduino_std_sw_spi_fn
