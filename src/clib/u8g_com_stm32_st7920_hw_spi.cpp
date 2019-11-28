@@ -36,7 +36,6 @@
 */
 
 #include "u8g.h"
-
 #include <Arduino.h> 
 
 #ifdef STM32F4
@@ -60,14 +59,8 @@ static void u8g_com_arduino_st7920_write_byte_hw_spi_seq(u8g_t *u8g, uint8_t rs,
 {
   uint8_t idx;
 
-  idx = 0;
-  if (rs == 0) {
-    _buf[0] = 0xf8;
+  _buf[0] = (rs == 0) ? 0xf8 : 0xfa;
     idx = 1;
-  } else if (rs == 1) {
-    _buf[0] = 0xfa;
-    idx = 1;
-  }
   while (len > 0) {
       _buf[idx++] = *ptr & 0x0f0;
       _buf[idx++] = *ptr << 4;
@@ -79,19 +72,10 @@ static void u8g_com_arduino_st7920_write_byte_hw_spi_seq(u8g_t *u8g, uint8_t rs,
 
 static void u8g_com_arduino_st7920_write_byte_hw_spi(u8g_t *u8g, uint8_t rs, uint8_t val)
 {
-  uint8_t idx;
-
-  idx = 0;
-  if (rs == 0) {
-    _buf[0] = 0xf8;
-    idx = 1;
-  } else if (rs == 1) {
-    _buf[0] = 0xfa;
-    idx = 1;
-  }
-  _buf[idx++] = val & 0x0f0;
-  _buf[idx++] = val << 4;
-  LCD_SPI_INSTANCE.transfer(_buf, idx);
+  _buf[0] = (rs == 0) ? 0xf8 : 0xfa;
+  _buf[1] = val & 0x0f0;
+  _buf[2] = val << 4;
+  LCD_SPI_INSTANCE.transfer(_buf, 3);
 }
 
 uint8_t u8g_com_stm32_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
@@ -100,10 +84,10 @@ uint8_t u8g_com_stm32_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val,
   {
     case U8G_COM_MSG_INIT:
       pinMode(u8g->pin_list[U8G_PI_CS], OUTPUT);
-      digitalWrite(u8g->pin_list[U8G_PI_CS], HIGH);
+      u8g_com_arduino_digital_write(u8g, U8G_PI_CS, LOW);
       if (u8g->pin_list[U8G_PI_RESET] != U8G_PIN_NONE) {
         pinMode(u8g->pin_list[U8G_PI_RESET], OUTPUT);
-        digitalWrite(u8g->pin_list[U8G_PI_RESET], HIGH);
+        u8g_com_arduino_digital_write(u8g, U8G_PI_RESET, HIGH);
       }
       u8g->pin_list[U8G_PI_A0_STATE] = 0;       /* inital RS state: command mode */
       break;
@@ -118,16 +102,13 @@ uint8_t u8g_com_stm32_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val,
       break;
       
     case U8G_COM_MSG_CHIP_SELECT:
-      if ( arg_val == 0 )
-      {
+      if ( arg_val == 0 ) {
         /* disable, note: the st7920 has an active high chip select */
         u8g_com_arduino_digital_write(u8g, U8G_PI_CS, LOW);
         LCD_SPI_INSTANCE.endTransaction();
-      }
-      else
-      {
+      } else {
         /* enable */
-        LCD_SPI_INSTANCE.beginTransaction(SPISettings(400000, MSBFIRST, SPI_MODE0));
+        LCD_SPI_INSTANCE.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));
         u8g_com_arduino_digital_write(u8g, U8G_PI_CS, HIGH);
       }
       break;

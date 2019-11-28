@@ -77,7 +77,7 @@ static inline void spiBegin() {
   lcdSPI.setSCLK(PB10);
 }
 
-static inline void spiInit(u8g_t *u8g, uint8_t spiRate) {
+static inline void spiInit(uint8_t spiRate) {
   // Use datarates Marlin uses
   uint32_t clock;
   switch (spiRate) {
@@ -104,7 +104,7 @@ uint8_t u8g_com_stm32_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *
       #ifndef SPI_SPEED
         #define SPI_SPEED SPI_FULL_SPEED  // use same SPI speed as SD card
       #endif
-      spiInit(u8g, SPI_SPEED);
+      spiInit(SPI_SPEED);
       break;
 
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */

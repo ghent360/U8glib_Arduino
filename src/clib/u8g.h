@@ -710,6 +710,7 @@ uint8_t u8g_com_raspberrypi_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val,
 uint8_t u8g_com_linux_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);             /* u8g_com_linux_ssd_i2c.c */
 
 uint8_t u8g_com_stm32_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);       /* u8g_com_stm32_st7920_hw_spi.c */
+uint8_t u8g_com_stm32_st7920_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
 uint8_t u8g_com_stm32_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);             /* u8g_com_stm32_ssd_i2c.c */
 uint8_t u8g_com_stm32_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
 uint8_t u8g_com_stm32_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
@@ -807,7 +808,7 @@ defined(__18CXX) || defined(__PIC32MX)
   #define U8G_COM_ST7920_SW_SPI u8g_com_arduino_st7920_spi_fn
  #elif defined(ARDUINO_ARCH_STM32)
   #define U8G_COM_SW_SPI u8g_com_stm32_sw_spi_fn
-  #define U8G_COM_ST7920_SW_SPI u8g_com_arduino_st7920_spi_fn
+  #define U8G_COM_ST7920_SW_SPI u8g_com_stm32_st7920_sw_spi_fn
  #elif defined(__arm__)   /* Teensy */
   #define U8G_COM_SW_SPI u8g_com_arduino_std_sw_spi_fn
   #define U8G_COM_ST7920_SW_SPI u8g_com_arduino_st7920_spi_fn
